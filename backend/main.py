@@ -17,13 +17,13 @@ from langchain_text_splitters import RecursiveCharacterTextSplitter
 from google import genai
 from google.genai.errors import ClientError
 
-# 🔑 Load environment
+# Load environment
 load_dotenv()
 api_key = os.getenv("GOOGLE_API_KEY")
 if not api_key or not api_key.startswith("AIza"):
     raise ValueError("Invalid or missing GOOGLE_API_KEY in .env")
 
-# 📦 Configuration (matches your CLI exactly)
+# Configuration (matches your CLI exactly)
 EMBED_MODEL = "all-MiniLM-L6-v2"
 CHAT_MODEL = "gemini-3-flash-preview"
 INDEX_PATH = "faiss_index.index"
@@ -39,7 +39,7 @@ SUMMARY_KEYWORDS = [
     "explain this paper", "abstract", "what does it cover", "tell me about"
 ]
 
-# 🌐 FastAPI Lifespan: Load models once at startup
+# FastAPI Lifespan: Load models once at startup
 text_splitter = RecursiveCharacterTextSplitter(
     chunk_size=CHUNK_SIZE, chunk_overlap=CHUNK_OVERLAP,
     separators=["\n\n", "\n", ". ", " ", ""], length_function=len, is_separator_regex=False
@@ -55,28 +55,28 @@ lock = asyncio.Lock()  # Thread safety for concurrent requests
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     global faiss_index, metadata
-    print("⏳ Loading FAISS index & metadata...")
+    print("Loading FAISS index & metadata...")
     if os.path.exists(INDEX_PATH) and os.path.exists(META_PATH):
         faiss_index = faiss.read_index(INDEX_PATH)
         with open(META_PATH, "r") as f:
             metadata = json.load(f)
-        print(f"✅ Loaded index with {len(metadata)} chunks.")
+        print(f"Loaded index with {len(metadata)} chunks.")
     else:
-        print("⚠️ No index found. Upload a PDF first via POST /upload.")
+        print("No index found. Upload a PDF first via POST /upload.")
     yield
 
 app = FastAPI(lifespan=lifespan, title="RAG Document Assistant", version="1.0.0")
 
-# 🔒 CORS for frontend (React/Next.js/Streamlit)
+# CORS for frontend (React/Next.js/Streamlit)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # 🔒 Change to your frontend URL in production
+    allow_origins=["*"],  # Change to your frontend URL in production
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# 📐 Pydantic Models
+# Pydantic Models
 class ChatRequest(BaseModel):
     question: str
     history: Optional[List[Dict[str, Any]]] = []
@@ -95,13 +95,13 @@ def clean_pdf_text(text: str) -> str:
     """Enhanced cleaning for research paper PDFs"""
     # ... [keep all your existing cleaning steps] ...
     
-    # 🆕 NEW: Fix common PDF extraction typos (space inserted mid-word)
+    #NEW: Fix common PDF extraction typos (space inserted mid-word)
     # Matches patterns like "distributi on", "conta in", "th at"
     text = re.sub(r'(\w{3,})\s+([a-z]{2,4})\b', 
                   lambda m: m.group(1) + m.group(2) if len(m.group(1) + m.group(2)) <= 15 else m.group(0), 
                   text)
     
-    # 🆕 NEW: Fix specific known artifacts from academic PDFs
+    # NEW: Fix specific known artifacts from academic PDFs
     fixes = {
         r'R ises': 'Rises',
         r'Farewellto': 'Farewell to',
@@ -123,7 +123,7 @@ def clean_pdf_text(text: str) -> str:
     # ... [keep the rest of your function] ...
     return text.strip()
 
-# 🧩 Helper: Citation snippet
+# Helper: Citation snippet
 def get_citation_snippet(text: str, max_len: int = 150) -> str:
     """Return a clean, meaningful snippet for citations"""
     # Clean common artifacts
@@ -150,7 +150,7 @@ def get_citation_snippet(text: str, max_len: int = 150) -> str:
     
     return first.strip()
 
-# 📄 Core: Ingest PDF
+# Core: Ingest PDF
 def ingest_pdf(pdf_path: str) -> int:
     global faiss_index, metadata
     reader = PdfReader(pdf_path)
@@ -176,14 +176,14 @@ def ingest_pdf(pdf_path: str) -> int:
     metadata = chunks
     with open(META_PATH, "w") as f: json.dump(metadata, f)
     
-    print(f"✅ Indexed {len(chunks)} chunks.")
+    print(f"Indexed {len(chunks)} chunks.")
     return len(chunks)
 
 # 🔍 Core: Context-Aware Retrieval
 def retrieve(query: str, is_summary: bool, k: int) -> List[Dict]:
     global faiss_index, metadata
     
-    # ✅ FIX: Proper syntax + check metadata list
+    # FIX: Proper syntax + check metadata list
     if faiss_index is None or not metadata:
         return []
     
@@ -212,7 +212,7 @@ def retrieve(query: str, is_summary: bool, k: int) -> List[Dict]:
     if not results: results = sorted(candidates, key=lambda x: -x["score"])[:k]
     return sorted(results, key=lambda x: -x["score"])[:k]
 
-# 📡 Endpoints
+# Endpoints
 @app.get("/health")
 def health_check():
     return {"status": "healthy", "chunks_indexed": len(metadata) if metadata else 0}
