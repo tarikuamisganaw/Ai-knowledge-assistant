@@ -4,3 +4,7 @@ pypdf
 faiss-cpu
 sentence-transformers
 langchain-text-splitters
+uvicorn[standard]
+python-multipart
+
+

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>RAG Document Assistant</title>
+    <style>
+      body { font-family: system-ui, -apple-system, sans-serif; margin: 0; padding: 2rem; background: #f9f9f9; }
+      .container { max-width: 800px; margin: 0 auto; background: white; padding: 1.5rem; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+      textarea { width: 100%; min-height: 80px; padding: 0.75rem; border: 1px solid #ddd; border-radius: 8px; font-size: 1rem; }
+      button { background: #007bff; color: white; border: none; padding: 0.75rem 1.5rem; border-radius: 8px; font-size: 1rem; cursor: pointer; margin-top: 0.5rem; }
+      button:disabled { background: #ccc; cursor: not-allowed; }
+      button:hover:not(:disabled) { background: #0056b3; }
+      .answer { margin-top: 1.5rem; padding: 1rem; background: #f5f7fa; border-radius: 8px; white-space: pre-wrap; }
+      .citations { margin-top: 1rem; font-size: 0.9rem; }
+      .citation { margin: 0.5rem 0; padding: 0.5rem; background: #fff; border-left: 3px solid #007bff; border-radius: 0 4px 4px 0; }
+      .upload { margin-bottom: 1.5rem; padding: 1rem; background: #eef2f7; border-radius: 8px; }
+      details { margin-top: 1rem; }
+      summary { cursor: pointer; font-weight: 500; }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>

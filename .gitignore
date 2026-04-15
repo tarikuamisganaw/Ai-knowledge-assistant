@@ -1,5 +1,19 @@
-.env
-venv/
+.DS_Store
+# Generated RAG artifacts
+faiss_index.index
+faiss_metadata.json
+uploads/
+
+# Python
 __pycache__/
 *.pyc
-.DS_Store
+*.egg-info/
+venv/
+
+# Environment
+.env
+.env.local
+
+# Node/Frontend
+frontend/node_modules/
+frontend/dist/
