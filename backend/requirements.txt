@@ -6,5 +6,6 @@ sentence-transformers
 langchain-text-splitters
 uvicorn[standard]
 python-multipart
-
-
+fastapi
+numpy
+pydantic
