@@ -1,19 +1,11 @@
-.DS_Store
-# Generated RAG artifacts
+venv/
+__pycache__/
+.env
+.env.local
+node_modules/
+dist/
 faiss_index.index
 faiss_metadata.json
 uploads/
-
-# Python
-__pycache__/
 *.pyc
-*.egg-info/
-venv/
-
-# Environment
-.env
-.env.local
-
-# Node/Frontend
-frontend/node_modules/
-frontend/dist/
+.DS_Store
