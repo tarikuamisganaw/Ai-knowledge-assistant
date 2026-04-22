@@ -10,9 +10,12 @@
 An enterprise-grade **Retrieval-Augmented Generation (RAG)** application designed to ingest complex PDF documents (like research papers or technical manuals) and provide accurate, context-aware answers complete with page citations.
 
 Built with a focus on performant vector similarity search and an exceptionally polished user interface.
-🌐 **Live Demo**: [https://ai-knowledge-assistant-pied.vercel.app/](https://ai-knowledge-assistant-pied.vercel.app/)  
+
 ---
 
+🌐 **Live Demo**: [https://ai-knowledge-assistant-pied.vercel.app/](https://ai-knowledge-assistant-pied.vercel.app/)  
+
+---
 ## 🌟 Key Features
 
 * **Context-Aware Insights**: Ask natural language questions and get synthesized answers extracted directly from your uploaded materials.
